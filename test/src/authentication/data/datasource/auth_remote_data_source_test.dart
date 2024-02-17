@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -7,6 +6,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:tdd_tutorial/core/errors/exceptions.dart';
 import 'package:tdd_tutorial/core/utils/constants.dart';
 import 'package:tdd_tutorial/src/authentication/data/datasource/auth_remote_data_source.dart';
+import 'package:tdd_tutorial/src/authentication/data/models/user_model.dart';
 
 class MockClient extends Mock implements http.Client {}
 
@@ -74,6 +74,26 @@ void main() {
             ),
           ),
         );
+
+        verifyNoMoreInteractions(client);
+      },
+    );
+  });
+
+  group('getUsers', () {
+    const tUsers = [UserModel.empty()];
+    test(
+      'should return [List<User>] when the status code is 200',
+      () async {
+        when(() => client.get(any())).thenAnswer(
+          (_) async => http.Response(jsonEncode([tUsers.first.toMap()]), 200),
+        );
+        final result = await dataSourceImpl.getUsers();
+
+        expect(result, equals(tUsers));
+
+        verify(() => client.get(Uri.parse('$kBaseUrl$kGetUsersEndpoint')))
+            .called(1);
 
         verifyNoMoreInteractions(client);
       },
