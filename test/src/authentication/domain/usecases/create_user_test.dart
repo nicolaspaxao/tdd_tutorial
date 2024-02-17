@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:tdd_tutorial/core/errors/failure.dart';
 import 'package:tdd_tutorial/src/authentication/domain/repos/auth_repo.dart';
 import 'package:tdd_tutorial/src/authentication/domain/usecases/create_user.dart';
 
@@ -17,7 +16,6 @@ void main() {
   });
 
   const tParams = CreateUserParams.empty();
-  const tFailure = ApiFailure(message: 'User not foud', statusCode: 401);
 
   test(
     'should call the [AuthRepo.createUser] successfuly',
