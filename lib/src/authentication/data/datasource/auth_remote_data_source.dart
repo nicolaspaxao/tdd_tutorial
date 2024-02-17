@@ -9,3 +9,21 @@ abstract class AuthRemoteDataSource {
 
   Future<List<UserModel>> getUsers();
 }
+
+class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
+  @override
+  Future<void> createUser({
+    required String createdAt,
+    required String name,
+    required String avatar,
+  }) async {
+    // TODO: implement createUser
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<UserModel>> getUsers() async {
+    // TODO: implement getUsers
+    throw UnimplementedError();
+  }
+}

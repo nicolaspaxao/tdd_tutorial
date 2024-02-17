@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:js_util';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
