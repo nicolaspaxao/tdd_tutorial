@@ -56,9 +56,20 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
 
   @override
   Future<List<UserModel>> getUsers() async {
-    final result = await _client.get(Uri.parse('$kBaseUrl$kGetUsersEndpoint'));
-    return List<DataMap>.from(jsonDecode(result.body) as List)
-        .map((e) => UserModel.fromMap(e))
-        .toList();
+    try {
+      final result =
+          await _client.get(Uri.parse('$kBaseUrl$kGetUsersEndpoint'));
+      if (result.statusCode != 200) {
+        throw ApiException(message: result.body, statusCode: result.statusCode);
+      } else {
+        return List<DataMap>.from(jsonDecode(result.body) as List)
+            .map((e) => UserModel.fromMap(e))
+            .toList();
+      }
+    } on ApiException {
+      rethrow;
+    } catch (e) {
+      throw ApiException(message: e.toString(), statusCode: 505);
+    }
   }
 }

@@ -48,7 +48,7 @@ void main() {
     });
 
     test(
-      'should thrown [ApiException] when the status code is not 200 or 2001',
+      'should thrown [ApiException] when the status code is not 200 or 201',
       () async {
         when(() => client.post(any(), body: any(named: 'body'))).thenAnswer(
           (_) async => http.Response('Invalid email address', 400),
@@ -91,6 +91,34 @@ void main() {
         final result = await dataSourceImpl.getUsers();
 
         expect(result, equals(tUsers));
+
+        verify(() => client.get(Uri.parse('$kBaseUrl$kGetUsersEndpoint')))
+            .called(1);
+
+        verifyNoMoreInteractions(client);
+      },
+    );
+
+    test(
+      'should thrown [ApiException] when the status code is not 200',
+      () async {
+        when(() => client.get(any())).thenAnswer(
+          (_) async => http.Response(
+            'Server down, try again in 500 years. Thank you',
+            500,
+          ),
+        );
+        final methodCall = dataSourceImpl.getUsers;
+
+        expect(
+          () => methodCall(),
+          throwsA(
+            const ApiException(
+              message: 'Server down, try again in 500 years. Thank you',
+              statusCode: 500,
+            ),
+          ),
+        );
 
         verify(() => client.get(Uri.parse('$kBaseUrl$kGetUsersEndpoint')))
             .called(1);
