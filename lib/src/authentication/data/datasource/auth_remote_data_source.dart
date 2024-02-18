@@ -18,7 +18,7 @@ abstract class AuthRemoteDataSource {
 }
 
 const kCreateUserEndpoint = '/users';
-const kGetUsersEndpoint = '/user';
+const kGetUsersEndpoint = '/users';
 
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   final http.Client _client;
@@ -38,9 +38,8 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     try {
       final response = await _client.post(
         Uri.parse('$kBaseUrl$kCreateUserEndpoint'),
-        body: jsonEncode(
-          {'createdAt': createdAt, 'name': name, 'avatar': avatar},
-        ),
+        body: jsonEncode({'createdAt': createdAt, 'name': name}),
+        headers: {"Content-Type": 'application/json'},
       );
 
       if (response.statusCode != 200 && response.statusCode != 201) {

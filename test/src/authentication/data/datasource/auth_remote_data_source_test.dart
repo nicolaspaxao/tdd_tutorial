@@ -25,7 +25,11 @@ void main() {
   const tAvatar = 'tAvatar';
   group('createUser', () {
     test('should complete successfully when the status code is OK', () async {
-      when(() => client.post(any(), body: any(named: 'body'))).thenAnswer(
+      when(() => client.post(
+            any(),
+            body: any(named: 'body'),
+            headers: {"Content-Type": 'application/json'},
+          )).thenAnswer(
         (_) async => http.Response('User created successfully', 201),
       );
 
@@ -42,6 +46,7 @@ void main() {
           body: jsonEncode(
             {'createdAt': tCreatedAt, 'name': tName, 'avatar': tAvatar},
           ),
+          headers: {"Content-Type": 'application/json'},
         ),
       );
       verifyNoMoreInteractions(client);
@@ -50,7 +55,11 @@ void main() {
     test(
       'should thrown [ApiException] when the status code is not 200 or 201',
       () async {
-        when(() => client.post(any(), body: any(named: 'body'))).thenAnswer(
+        when(() => client.post(
+              any(),
+              body: any(named: 'body'),
+              headers: {"Content-Type": 'application/json'},
+            )).thenAnswer(
           (_) async => http.Response('Invalid email address', 400),
         );
 
@@ -72,6 +81,7 @@ void main() {
             body: jsonEncode(
               {'createdAt': tCreatedAt, 'name': tName, 'avatar': tAvatar},
             ),
+            headers: {"Content-Type": 'application/json'},
           ),
         );
 
